@@ -12,8 +12,12 @@ const publicPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicPath))
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
     console.log('New websocket connection')
+    socket.emit('message', "Welcome!")
+    socket.on('sendMessage', (message) => {
+        io.emit('message', message)
+    })
 })
 
 server.listen(port, () => console.log(`Server listening on port ${port}!`))
