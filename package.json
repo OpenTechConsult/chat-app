@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/OpenTechConsult/chat-app#readme",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "debug": "^4.3.1",
     "express": "^4.17.1",
     "socket.io": "^2.2.0"

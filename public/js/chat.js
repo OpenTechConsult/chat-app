@@ -14,7 +14,12 @@ socket.on('userLocation', (userLocation) => {
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault()
     const messageInput = e.target.elements.messageToBeSent.value
-    socket.emit('sendMessage', messageInput)
+    socket.emit('sendMessage', messageInput, (error) => {
+        if (error) {
+            return console.log(error)
+        }
+        console.log('The message was delivered!')
+    })
 })
 
 shareLocationBtn.addEventListener('click', () => {
@@ -26,14 +31,16 @@ shareLocationBtn.addEventListener('click', () => {
             lat: position.coords.latitude,
             long: position.coords.longitude
         }
-        socket.emit('sendLocation', userLocation)
+        socket.emit('sendLocation', userLocation, () => {
+            console.log('Location shared!')
+        })
     })
 
 })
 
-// Goal: share coordinates with other users
-// 1. Have client emit "sendLocation" with an object as the data
-//      - Object should contain latitude and longitude properties
-// 2. Server should listen for "sendLocation"
-//      - When fired, send a "message" to all connected clients "Location: lat, long"
-// 3. Test the work
+// Goal: Setup acknowledgment
+//
+// 1. Setup the client acknowledgment function
+// 2. Setup the server to send back the acknowledgment
+// 3. Have the client print "Location shared!" when acknowledgment
+// 4. Test your work
