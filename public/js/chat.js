@@ -2,10 +2,17 @@ const chatForm = document.querySelector('form')
 const shareLocationBtn = document.querySelector('#share-location')
 const messageFormInput = document.querySelector('input')
 const messageFormBtn = document.querySelector('#sendMessageBtn')
+const $messages = document.querySelector('#messages')
+
+// Templates
+const messageTemplate = document.querySelector('#message-template').innerHTML
+
 const socket = io()
 
 socket.on('message', (message) => {
     console.log(message)
+    const html = Mustache.render(messageTemplate, { message })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('userLocation', (userLocation) => {
@@ -45,10 +52,3 @@ shareLocationBtn.addEventListener('click', () => {
     })
 
 })
-
-// Goal: Disable the send location button while location being sent
-//
-// 1. Setup a selector at the top of the file ✔️
-// 2. Disable the button just before getting the current position ✔️
-// 3. Enable the button in the acknowledgment callback ✔️
-// 4. Test your work ✔️
