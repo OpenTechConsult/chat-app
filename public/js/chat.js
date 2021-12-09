@@ -6,12 +6,35 @@ const $messages = document.querySelector('#messages')
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
+const locationTemplate = document.querySelector('#location-template').innerHTML
+
+// Goal: Add timestamps for location messages
+// 
+// 1. Create a "generateLocationMessage" and export
+//  - { url: '', createdAt: 0}
+// 2. Use generateLocationMessage when server emits locationMessage
+// 3. Update template to render time before url
+// 4. Compile the template with the URL and the formatted time
+// 5. Test your work
+
 
 const socket = io()
 
 socket.on('message', (message) => {
     console.log(message)
-    const html = Mustache.render(messageTemplate, { message })
+    const html = Mustache.render(messageTemplate, { 
+        message: message.text,
+        createdAt: moment(message.createdAt).format('h:mm a')
+     })
+    $messages.insertAdjacentHTML('beforeend', html)
+})
+
+socket.on('locationMessage', (url) => {
+    console.log(url)
+    const html = Mustache.render(locationTemplate, { 
+        url: url.url,
+        createdAt: moment(url.createdAt).format('h:mm a')
+     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
