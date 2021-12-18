@@ -32,20 +32,22 @@ io.on('connection', (socket) => {
         callback()
     })
     
+    
     socket.on('sendMessage', (message, callback) => {
+        const user = getUser(socket.id)
+        console.log(' inside sendMessage listener' + user)
         const filter = new Filter()
         if (filter.isProfane(message)) {
             return callback('Profanity is not allowed!')
         }
-        io.to('Node').emit('message', generateMessage(message))
+        io.to(user.room).emit('message', generateMessage(message))
         callback()
     })
 
     socket.on('sendLocation', (userLocation, callback) => {
-        console.log(`http://google.com/maps?q=${userLocation.lat},${userLocation.long}`)
-        // io.emit('locationMessage', `http://google.com/maps?q=${userLocation.lat},${userLocation.long}`)
+        const user = getUser(socket.id)
         const url = `http://google.com/maps?q=${userLocation.lat},${userLocation.long}`
-        io.emit('locationMessage', generateLocationMessage(url))
+        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, url))
         callback()
     })
 
