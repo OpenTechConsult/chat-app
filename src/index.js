@@ -32,15 +32,6 @@ io.on('connection', (socket) => {
         callback()
     })
     
-    /**
-     * Goals: Render username for text messages
-     * 
-     * 1. Setup the server to send username to client
-     * 2. Edit every call to "generateMessage" to include username
-     *    - Use "Admin" for sys messages like connect/welcome/disconnect
-     * 3. Update the client to render username in template
-     * 4. Test your work
-     */
     socket.on('sendMessage', (message, callback) => {
         const user = getUser(socket.id)
         console.log(' inside sendMessage listener' + user)
